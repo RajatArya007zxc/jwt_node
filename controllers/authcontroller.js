@@ -1,3 +1,8 @@
+const jwt=require('jsonwebtoken');
+
+
+
+
 
 ///// Now we rquire the userModel from the user.js for accessing the schema of database db
 const userModel=require('../models/user');
@@ -21,10 +26,7 @@ const handleError=(err)=>{
     return errors;
 }
 
-
-
-
-     ////// ///// / / /
+  ////// ///// / / /
      //                  Validation Error
      if(err.message.includes('user validation failed')){ 
         //  console.log(err)
@@ -37,6 +39,18 @@ const handleError=(err)=>{
      }
      return errors;
 }
+
+
+
+
+ /* creating token function because its used in both signup and sign in  */
+ const timeMax=3*24*60*60; //3 days
+ const createToken=(id)=>{
+     return jwt.sign({id},'secret not for everyone',{
+         expiresIn:timeMax
+     })
+ }
+
 
 
 module.exports.signup_get=(req,res)=>{    
@@ -57,7 +71,13 @@ module.exports.signup_post=async (req,res)=>{   //////// now we change this to a
     try{
 const user=await userModel.create({email,password}) 
 
- res.status(201).json(user)  //201 success 
+/// jwt is used after creating which we create above 
+ const token=createToken(user._id)  //// for taking the item with their id (remember _id is used)
+ res.cookie('jwt',token,{httpOnly:true,maxAge:timeMax *1000})
+
+
+ //res.status(201).json(user)  //201 success 
+ res.status(201).json({user:user._id})  //201 success 
     }
     catch(err){
   

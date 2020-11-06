@@ -33,20 +33,3 @@ app.use(authRoute);
 //without cookieParser
 //res.setHeader('Set-cookie',"newUSERCookie")
 
-app.get('/cookieSet',(req,res)=>{
-
-   res.cookie('newUSerCookie',true,{maxAge:1000 *60*60*24}) // secure : only https and httponly not access through js (in console. document.cookie)
-   //,httpOnly:true,secure:true
-   res.send("cookiesssss")
-  })
-
-
-  /// for read cookie or get cookie
-
-
-  app.get('/getCookie',(req,res)=>{
-
-    const cookie=req.cookies;
-    console.log(cookie);
-    res.json(cookie)
-  })
