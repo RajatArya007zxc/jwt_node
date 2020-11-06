@@ -17,6 +17,25 @@ const userSchema=new mongoose.Schema({
     }
 })
 
+
+//////// IMPORTANT note always use next() at the end whenever we used mongoose middleware and hooks
+
+//fire a function after doc saved into db
+userSchema.post('save',(doc,next)=>{    //// after saving the data(save) the post is called
+    console.log(doc)
+    next();
+})
+
+////// Fire a function before
+
+userSchema.pre('save',function(next){
+
+    console.log("before created",this)
+    next();
+
+})
+
+
 const userModel=mongoose.model('user',userSchema);
 
 module.exports=userModel;
