@@ -1,6 +1,8 @@
 const mongoose=require('mongoose')
 const {isEmail}=require('validator')
 
+const bcrypt =require('bcrypt');
+
 const userSchema=new mongoose.Schema({
     email:{
         type:String,
@@ -22,15 +24,25 @@ const userSchema=new mongoose.Schema({
 
 //fire a function after doc saved into db
 userSchema.post('save',(doc,next)=>{    //// after saving the data(save) the post is called
-    console.log(doc)
+    //console.log(doc)
     next();
 })
 
 ////// Fire a function before
 
-userSchema.pre('save',function(next){
+userSchema.pre('save',async function(next){
 
-    console.log("before created",this)
+   // console.log("before created",this)
+
+
+
+   const saltCreate=await bcrypt.genSalt();
+  
+  this.password=await bcrypt.hash(this.password,saltCreate);
+
+
+
+   //// for hasing download bcrypt lib
     next();
 
 })
