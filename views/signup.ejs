@@ -19,10 +19,16 @@
 <script>
 
 const form=document.querySelector('form');
+const emailError=document.querySelector('.email.error')
+const passwordError=document.querySelector('.password.error')
 
 form.addEventListener('submit',async(e)=>{
 
     e.preventDefault();
+
+    //reset errors 
+    emailError.textContent=''
+             passwordError.textContent=''
 
 
     //get the value
@@ -35,6 +41,20 @@ form.addEventListener('submit',async(e)=>{
              body:JSON.stringify({email,password}),
              headers:{'Content-Type':'application/json'}
          })
+         const data=await res.json()
+         console.log(data); //its return user id which we type and saved 
+
+
+         if(data.errors){
+             emailError.textContent=data.errors.email
+             passwordError.textContent=data.errors.password
+         }
+
+         ///redirect
+
+         if(data.user){
+             location.assign('/');
+         }
 
      }
      catch(err){
