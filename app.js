@@ -7,6 +7,9 @@ const app = express();
 // middleware
 app.use(express.static('public'));
 
+//here we use the json parser middleware
+app.use(express.json());
+
 // view engine
 app.set('view engine', 'ejs');
 
