@@ -7,7 +7,7 @@ const jwt=require('jsonwebtoken');
 ///// Now we rquire the userModel from the user.js for accessing the schema of database db
 const userModel=require('../models/user');
 
-/// the response we will getting "error ,user not created" if we add validator also .It will solve by the adding the function and improve the catch{}
+/// the response we will getting "error ,user not created(in postman)" if we add validator also .It will solve by the adding the function and improve the catch{}
 
 /// 
 const handleError=(err)=>{
@@ -98,7 +98,16 @@ module.exports.login_post=async (req,res)=>{
 
     //now destructuring the data comming from the req
     const {email,password}=req.body
-    res.send('user login')
+
+
+    try{
+        const user=await userModel.login(email,password);
+        res.status(200).json({user:user._id})
+    }
+    catch(err){
+
+        res.status(400).json({})
+    }
 }
 
 

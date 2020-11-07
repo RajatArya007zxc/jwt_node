@@ -47,6 +47,23 @@ userSchema.pre('save',async function(next){
 
 })
 
+//// static method to login user
+
+userSchema.statics.login =async function(email,password){   /// "login" whaterver we write but itss used when login
+    const user=await this.findOne({email})  /// this means the userSchema 
+
+    if(user){
+
+       const auth=await bcrypt.compare(password,user.password)
+       if(auth){
+           return user
+       }
+       throw Error('password not correct ')
+
+    }
+    throw Error('incorrect email')
+}
+
 
 const userModel=mongoose.model('user',userSchema);
 
