@@ -17,6 +17,19 @@ const handleError=(err)=>{
      let errors={email:'',password:''};
 
 
+
+      /////// incorrect email
+      if(err.message === 'incorrect email'){
+          errors.email='That Email is not registered'
+      }
+      if(err.message === 'incorrect password'){
+        errors.password='That password is incorrect'
+    }
+
+
+
+
+
  ///// duplicate error code
  ///// this is used when any one of them (from email and password) is wrong while putting
  if(err.code ===11000)
@@ -102,11 +115,26 @@ module.exports.login_post=async (req,res)=>{
 
     try{
         const user=await userModel.login(email,password);
+
+
+         /////// cookie
+         const token=createToken(user._id)  //// for taking the item with their id (remember _id is used)
+
+         res.cookie('jwt',token,{httpOnly:true,maxAge:timeMax *1000})
+
+
+         
         res.status(200).json({user:user._id})
+
+
+
+       
+      
     }
     catch(err){
-
-        res.status(400).json({})
+  
+         const errors=handleError(err)
+        res.status(400).json({errors})
     }
 }
 
