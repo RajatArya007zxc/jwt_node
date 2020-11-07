@@ -123,7 +123,7 @@ module.exports.login_post=async (req,res)=>{
          res.cookie('jwt',token,{httpOnly:true,maxAge:timeMax *1000})
 
 
-         
+
         res.status(200).json({user:user._id})
 
 
@@ -147,6 +147,12 @@ module.exports.login_post=async (req,res)=>{
 
 
 
+module.exports.logout_get=(req,res)=>{
+
+    res.cookie('jwt','',{maxAge:1}) // for less than a second 
+
+    res.redirect('/');
+}
 
 
 
